@@ -1,0 +1,86 @@
+import 'dart:io';
+
+void main() {
+  // List to store students information
+  List<Map<String, dynamic>> students = [];
+
+  // List of subjects 
+  List<String> subjects = ['Math', 'Science', 'English'];
+
+  // Loop to handle multiple students
+  while (true) {
+    print("Enter Your Name OR ( type 'exit' to finish): ");
+    String name = stdin.readLineSync() ?? '';
+
+    if (name.toLowerCase() == 'exit') {
+      break; 
+    }
+
+    // List to store scores of subjects
+    List<double> scores = [];
+
+    // Input scores for each subject
+    for (var subject in subjects) {
+      double score;
+
+      while (true) {
+        print("Enter score for $subject (0-100): ");
+        String? input = stdin.readLineSync();
+
+        try {
+          score = double.parse(input ?? '');
+
+          if (score < 0 || score > 100) {
+            print("Invalid input! Score must be between 0 and 100.");
+          } else {
+            scores.add(score);
+            break; // Valid input, break the loop
+          }
+        } catch (e) {
+          print("Invalid input! Please enter a valid number.");
+        }
+      }
+    }
+
+    // Calculate total and average scores
+    double totalScore = scores.reduce((a, b) => a + b);
+    double averageScore = totalScore / scores.length;
+
+    // Assign grade based on average score
+    String grade;
+    if (averageScore >= 90) {
+      grade = 'A';
+    } else if (averageScore >= 80) {
+      grade = 'B';
+    } else if (averageScore >= 70) {
+      grade = 'C';
+    } else if (averageScore >= 60) {
+      grade = 'D';
+    } else {
+      grade = 'F';
+    }
+
+    // Store student's information
+    students.add({
+      'name': name,
+      'scores': scores,
+      'totalScore': totalScore,
+      'averageScore': averageScore,
+      'grade': grade,
+    });
+
+    print("Student information saved!\n");
+  }
+
+  // Display summary of all students
+  print("\nSummary of Students:");
+  for (var student in students) {
+    print("Name: ${student['name']}");
+    for (int i = 0; i < subjects.length; i++) {
+      print("  ${subjects[i]}: ${student['scores'][i]}");
+    }
+    print("  Total Score: ${student['totalScore']}");
+    print("  Average Score: ${student['averageScore'].toStringAsFixed(2)}");
+    print("  Grade: ${student['grade']}\n");
+  }
+}
